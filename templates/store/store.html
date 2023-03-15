@@ -121,7 +121,7 @@
 
                 <header class="border-bottom mb-4 pb-3">
                     <div class="form-inline">
-                        <span class="mr-md-auto">{{ products| length }} Items found </span>
+                        <span class="mr-md-auto">{{ prodoct_count }} Items found </span>
 
                     </div>
                 </header><!-- sect-heading -->
@@ -147,13 +147,14 @@
                                 </div>
                                 {% if product.stock <= 0 %} <h5 class="text-danger">Out of Stock</h5>
                                     {% else %}
-                                        {% if not in_cart %}
-                                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-block  btn-primary"> <span
-                                                    class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a>
-                                        {% else %}
-                                            <a href="{% url 'cart' %}" class="btn btn-block btn-success"> <span class="text">Added to
-                                                    cart</span> <i class="fas fa-check"></i> </a>
-                                        {% endif %}
+                                    {% if not in_cart %}
+                                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-block  btn-primary">
+                                        <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a>
+                                    {% else %}
+                                    <a href="{% url 'cart' %}" class="btn btn-block btn-success"> <span
+                                            class="text">Added to
+                                            cart</span> <i class="fas fa-check"></i> </a>
+                                    {% endif %}
                                     {% endif %}
                             </figcaption>
                         </figure>
@@ -166,13 +167,31 @@
 
 
                 <nav class="mt-4" aria-label="Page navigation sample">
+                    {% if products.has_other_pages %}
                     <ul class="pagination">
+                        {% if products.has_previous %}
+                        <li class="page-item "><a class="page-link"
+                                href="?page={{products.previous_page_number}}">Previous</a></li>
+                        {% else %}
                         <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        {% endif %}
+
+                        {% for page_number in products.paginator.page_range %}
+                            {% if page_number == products.number %}
+                            <li class="page-item active"><a class="page-link" href="#">{{page_number}}</a></li>
+                            {% else %}
+                            <li class="page-item "><a class="page-link" href="?page={{page_number}}">{{page_number}}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if products.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                        {% endif %}
                     </ul>
+                    {% endif %}
                 </nav>
 
             </main> <!-- col.// -->
