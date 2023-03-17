@@ -11,13 +11,13 @@ def store(request,category_slug=None):
     products=None;
     if category_slug:
         category=get_object_or_404(Category,slug=category_slug)
-        products=Product.objects.all().filter(is_available=True,category=category)
+        products=Product.objects.all().filter(is_available=True,category=category).order_by('id')
     else:    
-        products=Product.objects.all().filter(is_available=True)
+        products=Product.objects.all().filter(is_available=True).order_by('id')
 
     prodoct_count=products.count()   
         
-    paginator=Paginator(products,2)    
+    paginator=Paginator(products,6)    
     page=request.GET.get('page')
     paged_product=paginator.get_page(page)
 
