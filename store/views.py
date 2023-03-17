@@ -34,14 +34,19 @@ def product_details(request,category_slug,product_slug):
 
 
 def search(request):
-    if 'keyword' in request.GET:
-        keyword=request.GET['keyword']
-        if keyword:
-            products=Product.objects.order_by('-created_date').filter(Q(product_name__icontains=keyword)|Q(description__icontains=keyword))
-        prodoct_count=products.count()   
+    
+    if not 'keyword' in request.GET or not request.GET.get('keyword'):
+        products=None
+        prodoct_count=0   
+        context={'products':products,'prodoct_count':prodoct_count}
 
-    paginator=Paginator(products,6)    
-    page=request.GET.get('page')
-    paged_product=paginator.get_page(page)      
-    context={'products':paged_product,'prodoct_count':prodoct_count}
+    else:
+        keyword=request.GET.get('keyword')
+        products=Product.objects.order_by('-created_date').filter(Q(product_name__icontains=keyword)|Q(description__icontains=keyword))
+        prodoct_count=products.count() 
+        paginator=Paginator(products,6)    
+        page=request.GET.get('page')
+        paged_product=paginator.get_page(page)      
+        context={'products':paged_product,'prodoct_count':prodoct_count}
+    
     return render(request,'store/store.html',context)
