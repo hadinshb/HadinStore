@@ -4,7 +4,11 @@
 <!-- ========================= SECTION PAGETOP ========================= -->
 <section class="section-pagetop bg">
     <div class="container">
+        {% if 'search' in request.path %}
+        <h2 class="title-page">Search Results</h2>
+        {% else %}
         <h2 class="title-page">Our Store</h2>
+        {% endif%}
 
     </div> <!-- container //  -->
 </section>
@@ -127,40 +131,44 @@
                 </header><!-- sect-heading -->
 
                 <div class="row">
-                    {% for product in products %}
-                    <div class="col-md-4">
-                        <figure class="card card-product-grid">
-                            <div class="img-wrap">
+                    {% if products %}
+                        {% for product in products %}
+                        <div class="col-md-4">
+                            <figure class="card card-product-grid">
+                                <div class="img-wrap">
 
-                                <a href="{% url 'product_details' product.category.slug product.slug %}"> <img
-                                        src="{{ product.images.url }}"></a>
+                                    <a href="{% url 'product_details' product.category.slug product.slug %}"> <img
+                                            src="{{ product.images.url }}"></a>
 
-                            </div> <!-- img-wrap.// -->
-                            <figcaption class="info-wrap">
-                                <div class="fix-height">
-                                    <a href="{% url 'product_details' product.category.slug product.slug %}"
-                                        class="title">{{product.product_name}}</a>
-                                    <div class="price-wrap mt-2">
-                                        <span class="price">${{product.price}}</span>
-                                        <!-- <del class="price-old">$1980</del> -->
-                                    </div> <!-- price-wrap.// -->
-                                </div>
-                                {% if product.stock <= 0 %} <h5 class="text-danger">Out of Stock</h5>
-                                    {% else %}
-                                    {% if not in_cart %}
-                                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-block  btn-primary">
-                                        <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a>
-                                    {% else %}
-                                    <a href="{% url 'cart' %}" class="btn btn-block btn-success"> <span
-                                            class="text">Added to
-                                            cart</span> <i class="fas fa-check"></i> </a>
-                                    {% endif %}
-                                    {% endif %}
-                            </figcaption>
-                        </figure>
-                    </div> <!-- col.// -->
+                                </div> <!-- img-wrap.// -->
+                                <figcaption class="info-wrap">
+                                    <div class="fix-height">
+                                        <a href="{% url 'product_details' product.category.slug product.slug %}"
+                                            class="title">{{product.product_name}}</a>
+                                        <div class="price-wrap mt-2">
+                                            <span class="price">${{product.price}}</span>
+                                            <!-- <del class="price-old">$1980</del> -->
+                                        </div> <!-- price-wrap.// -->
+                                    </div>
+                                    {% if product.stock <= 0 %} <h5 class="text-danger">Out of Stock</h5>
+                                        {% else %}
+                                        {% if not in_cart %}
+                                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-block  btn-primary">
+                                            <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a>
+                                        {% else %}
+                                        <a href="{% url 'cart' %}" class="btn btn-block btn-success"> <span
+                                                class="text">Added to
+                                                cart</span> <i class="fas fa-check"></i> </a>
+                                        {% endif %}
+                                        {% endif %}
+                                </figcaption>
+                            </figure>
+                        </div> <!-- col.// -->
 
-                    {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                    <h2> No Products...</h2>
+                    {% endif %}
 
 
                 </div> <!-- row end.// -->
