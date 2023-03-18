@@ -132,44 +132,34 @@
 
                 <div class="row">
                     {% if products %}
-                        {% for product in products %}
-                        <div class="col-md-4">
-                            <figure class="card card-product-grid">
-                                <div class="img-wrap">
+                    {% for product in products %}
+                    <div class="col-md-4">
+                        <figure class="card card-product-grid">
+                            <div class="img-wrap">
 
-                                    <a href="{% url 'product_details' product.category.slug product.slug %}"> <img
-                                            src="{{ product.images.url }}"></a>
+                                <a href="{% url 'product_details' product.category.slug product.slug %}"> <img
+                                        src="{{ product.images.url }}"></a>
 
-                                </div> <!-- img-wrap.// -->
-                                <figcaption class="info-wrap">
-                                    <div class="fix-height">
-                                        <a href="{% url 'product_details' product.category.slug product.slug %}"
-                                            class="title">{{product.product_name}}</a>
-                                        <div class="price-wrap mt-2">
-                                            <span class="price">${{product.price}}</span>
-                                            <!-- <del class="price-old">$1980</del> -->
-                                        </div> <!-- price-wrap.// -->
-                                    </div>
-                                    {% if product.stock <= 0 %} <h5 class="text-danger">Out of Stock</h5>
-                                        {% else %}
-                                        {% if not in_cart %}
-                                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-block  btn-primary">
-                                            <span class="text">Add to cart</span> <i class="fas fa-shopping-cart"></i> </a>
-                                        {% else %}
-                                        <a href="{% url 'cart' %}" class="btn btn-block btn-success"> <span
-                                                class="text">Added to
-                                                cart</span> <i class="fas fa-check"></i> </a>
-                                        {% endif %}
-                                        {% endif %}
-                                </figcaption>
-                            </figure>
-                        </div> <!-- col.// -->
+                            </div> <!-- img-wrap.// -->
+                            <figcaption class="info-wrap">
+                                <div class="fix-height">
+                                    <a href="{% url 'product_details' product.category.slug product.slug %}"
+                                        class="title">{{product.product_name}}</a>
+                                    <div class="price-wrap mt-2">
+                                        <span class="price">${{product.price}}</span>
+                                        <!-- <del class="price-old">$1980</del> -->
+                                    </div> <!-- price-wrap.// -->
+                                </div>
+                                <a href="{% url 'product_details' product.category.slug product.slug %}" class="btn btn-block btn-primary"> <span class="text">Read More...</span> <i class="fas fa-info"></i> </a>
+                            </figcaption>
+                        </figure>
+                    </div> <!-- col.// -->
 
-                        {% endfor %}
+                    {% endfor %}
                     {% else %}
                     <div>
-                    <h2> No Products...</h2>
-                </div>
+                        <h2> No Products...</h2>
+                    </div>
                     {% endif %}
 
 
@@ -187,11 +177,12 @@
                         {% endif %}
 
                         {% for page_number in products.paginator.page_range %}
-                            {% if page_number == products.number %}
-                            <li class="page-item active"><a class="page-link" href="#">{{page_number}}</a></li>
-                            {% else %}
-                            <li class="page-item "><a class="page-link" href="?page={{page_number}}">{{page_number}}</a></li>
-                            {% endif %}
+                        {% if page_number == products.number %}
+                        <li class="page-item active"><a class="page-link" href="#">{{page_number}}</a></li>
+                        {% else %}
+                        <li class="page-item "><a class="page-link" href="?page={{page_number}}">{{page_number}}</a>
+                        </li>
+                        {% endif %}
                         {% endfor %}
 
                         {% if products.has_next %}
