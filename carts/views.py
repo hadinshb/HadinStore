@@ -61,10 +61,8 @@ def AddToCart(request,product_id):
 
 
 
-def remove_cart(request,product_id):
-    cart=Cart.objects.get(cart_id=_cart_id(request))
-    product=get_object_or_404(Product,id=product_id)
-    cart_item=get_object_or_404(CartItem,product=product,cart=cart)
+def remove_cart_item(request,cart_item_id):
+    cart_item=get_object_or_404(CartItem,id=cart_item_id,cart__cart_id=_cart_id(request))
     if cart_item.quantity>1:
         cart_item.quantity-=1
         cart_item.save()
@@ -73,10 +71,8 @@ def remove_cart(request,product_id):
 
     return redirect('cart')    
 
-def remove_cart_item(request,product_id):
-    cart=Cart.objects.get(cart_id=_cart_id(request))
-    product=get_object_or_404(Product,id=product_id)
-    cart_item=get_object_or_404(CartItem,product=product,cart=cart)
+def remove_cart(request,cart_item_id):
+    cart_item=get_object_or_404(CartItem,id=cart_item_id,cart__cart_id=_cart_id(request))
     cart_item.delete()
 
     return redirect('cart')    
