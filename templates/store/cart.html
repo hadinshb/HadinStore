@@ -34,7 +34,12 @@
                                         <figcaption class="info">
                                             <a href="{% url 'product_details' cart_item.product.category.slug cart_item.product.slug %}"
                                                 class="title text-dark">{{ cart_item.product.product_name }}</a>
-                                            <!-- <p class="text-muted small">Matrix: 25 Mpx <br> Brand: Canon</p> -->
+                                            <p class="text-muted small">
+                                                {% for variation in cart_item.variations.all %}
+                                                {{variation.variation_category | capfirst}} : {{variation.variation_value | capfirst}}
+                                                <br>
+                                                {% endfor %}
+                                            </p>
                                         </figcaption>
                                     </figure>
                                 </td>

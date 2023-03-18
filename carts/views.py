@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import HttpResponse
 from .models import Cart,CartItem
-from store.models import Product
+from store.models import Product,Variation
 
 
 # Create your views here.
@@ -16,6 +16,18 @@ def _cart_id(request):
 
 
 def AddToCart(request,product_id):
+    product_variation=[]
+    if request.method == 'POST':
+        for item in request.POST:
+            key=item
+            value=request.POST[key]
+            try:
+                variation=Variation.objects.get(product__id=product_id,variation_category__iexact=key,variation_value__iexact=value)
+                product_variation.append(variation)
+            except:
+                pass
+            
+
     product=get_object_or_404(Product,id=product_id)
 
     try:
@@ -24,13 +36,26 @@ def AddToCart(request,product_id):
         cart=Cart.objects.create(cart_id=_cart_id(request))
         cart.save()
 
-    try:
-        cartitem=CartItem.objects.get(product=product,cart=cart)
-        cartitem.quantity+=1
-        cartitem.save()
-    except CartItem.DoesNotExist:
+   
+    cartitems=CartItem.objects.filter(product=product,cart=cart)
+   
+    if cartitems:
+        cartItemFound=False
+        for cartItem in cartitems:
+            if  set(cartItem.variations.all()) == set(product_variation):
+                cartItem.quantity+=1
+                cartItem.save()
+                cartItemFound=True
+                break
+        if not cartItemFound :
+            cartitem=CartItem.objects.create(product=product,cart=cart,quantity=1)    
+            cartitem.variations.add(*product_variation)
+            cartitem.save()
+    else:
         cartitem=CartItem.objects.create(product=product,cart=cart,quantity=1)    
-        cartitem.save()
+        cartitem.variations.add(*product_variation)
+        cartitem.save()  
+        
 
     return redirect('cart')   
 
