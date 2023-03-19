@@ -3,8 +3,8 @@ from .forms import RegistrationForm
 
 # Create your views here.
 def register(request):
-    registrationForm=RegistrationForm()
-    context={'registration_form':registrationForm}
+    form=RegistrationForm()
+    context={'form':form}
     return render(request,'accounts/register.html',context)
 
 def login(request):
