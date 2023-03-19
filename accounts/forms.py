@@ -14,3 +14,10 @@ class RegistrationForm(forms.ModelForm):
         super(RegistrationForm,self).__init__(*arg,**karg)
         for field in self.fields:
             self.fields[field].widget.attrs['class']='form-control'
+
+    def clean(self):
+        cleaned_data=super(RegistrationForm,self).clean()
+        password=cleaned_data.get('password')
+        password_confrim=cleaned_data.get('password_confirm')
+        if password != password_confrim:
+            raise forms.ValidationError('Passwords does not match!')
